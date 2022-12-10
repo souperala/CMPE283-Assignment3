@@ -1,17 +1,18 @@
 # CMPE 283 - Virtualization Technologies
 
-## Assignment II - Instrumentation via hypercall (Student ID: 016114254)
+## Assignment III - Instrumentation via hypercall (Student ID: 016114254)
 
 
    Objective:  
     The aim of this assignment is to modify the CPUID emulation code in KVM to report back additional information when special CPUID leaf nodes are requested.
     
-        CPUID leaf node %eax=0x4FFFFFFC:
-            Return the total number of exits (all types) in %eax
-        CPUID leaf node %eax=0x4FFFFFFD:
-            Return the high 32 bits of the total time spent processing all exits in %ebx
-            Return the low 32 bits of the total time spent processing all exits in %ecx
-              %ebx and %ecx return values are measured in processor cycles, across all vCPUs
+        CPUID leaf node %eax=0x4FFFFFFF:
+            Return the number of exits for the exit number provided (on input) in %ecx
+               This value should be returned in %eax 
+        CPUID leaf node %eax=0x4FFFFFFE:
+            Return the time spent processing the exit number provided (on input) in %ecx
+                 Return the high 32 bits of the total time spent for that exit in %ebx
+                 Return the low 32 bits of the total time spent for that exit in %ecx
               
    ### 1. Team contribution:
    
@@ -143,14 +144,14 @@ So, use these instructions to modify the password and log in to the virtual mach
 
 #### step 13: open the two terminals(GCP VM "T1", and nested VM terminal "T2") and test the cpuid functionality using the below commands
 
-        Testing the CPUID functionality for '%eax=0x4ffffffc'      
-        T2: sudo cpuid -l 0x4ffffffc
+        Testing the CPUID functionality for '%eax=0x4fffffff'      
+        T2: sudo cpuid -l 0x4fffffff
 <img width="756" alt="image" src="https://user-images.githubusercontent.com/98585812/205811522-37044237-df26-4c76-9ef8-91e164d7c18a.png">
         T1: sudo dmesg
 <img width="770" alt="image" src="https://user-images.githubusercontent.com/98585812/205811575-d1d8de84-06a7-4023-9694-72229b0c1e67.png">
 
-        Testing the CPUID functionality for '%eax=0x4ffffffd'
-        T2: sudo cpuid -l 0x4ffffffd
+        Testing the CPUID functionality for '%eax=0x4ffffffe'
+        T2: sudo cpuid -l 0x4ffffffe
 <img width="730" alt="image" src="https://user-images.githubusercontent.com/98585812/205811627-32facdb8-116c-48e1-af73-8a4976e0892d.png">
         T1: sudo dmesg
 <img width="781" alt="image" src="https://user-images.githubusercontent.com/98585812/205811677-7a421277-a5a6-44f6-9192-751f5709e162.png">
